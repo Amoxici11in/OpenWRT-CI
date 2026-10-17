@@ -17,8 +17,8 @@ CONFIG_PACKAGE_homebox=n
 CONFIG_PACKAGE_luci-app-oaf=y
 
 # ===== Clash 代理 =====
-CONFIG_PACKAGE_luci-app-openclash=y
+CONFIG_PACKAGE_luci-app-openclash=n
 
 
-CONFIG_PACKAGE_frpc=y
-CONFIG_PACKAGE_luci-app-frpc=y
+CONFIG_PACKAGE_frpc=n
+CONFIG_PACKAGE_luci-app-frpc=n
