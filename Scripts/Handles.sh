@@ -43,15 +43,3 @@ FIX "natmapt" "$PACKAGE_PATH/luci-app-natmapt" sed -i "s/network/services/g" \
 #修复Rust编译失败
 FIX "rust" "$FEEDS_PATH/packages/lang/rust" sed -i 's/ci-llvm=true/ci-llvm=false/g' \
 	"$FEEDS_PATH/packages/lang/rust/Makefile"
-
-#3) frpc 文件冲突：superzjg/luci-app-frpc 自带 init.d/config 完整方案，
-#   feeds 的 frpc 只保留 /usr/bin/frpc 二进制，frps 不受影响
-FRP_MK="$FEEDS_PATH/packages/net/frp/Makefile"
-if grep -q 'INSTALL_BIN)  \./files/\$(2)\.init' "$FRP_MK" 2>/dev/null; then
-	sed -i \
-		-e 's|\t\$(INSTALL_CONF) \./files/\$(2)\.config .*|\tif [ "$(2)" != "frpc" ]; then $(INSTALL_CONF) ./files/$(2).config $(1)/etc/config/$(2); fi|' \
-		-e 's|\t\$(INSTALL_BIN)  \./files/\$(2)\.init .*|\tif [ "$(2)" != "frpc" ]; then $(INSTALL_BIN)  ./files/$(2).init   $(1)/etc/init.d/$(2); fi|' \
-		-e 's|if \[ -r \./files/\$(2)\.uci-defaults \]; then|if [ "$(2)" != "frpc" ] \&\& [ -r ./files/$(2).uci-defaults ]; then|' \
-		"$FRP_MK"
-	echo "feeds frpc init/config overlap has been fixed!"
-fi
